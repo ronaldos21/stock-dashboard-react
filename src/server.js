@@ -1,32 +1,46 @@
-const express = require("express");
-const cors = require("cors");
-const yahooFinance = require("yahoo-finance2").default; // ✅ Only use in backend!
+const express = require("express"); // Creates a web server
+const cors = require("cors"); // Allows requests from the frontend
+const yahooFinance = require("yahoo-finance2").default; // Fetches stock data
 
-const app = express();
-const PORT = process.env.PORT || 5004;
+const app = express(); // Creates an instance of the Express server
+const PORT = process.env.PORT || 5004; // Port number
 
 app.use(cors()); // Enable CORS to allow frontend requests
 
-// Route to fetch stock historical data
+// ✅ Route to fetch stock historical data
 app.get("/api/stock-history/:symbol", async (req, res) => {
     const { symbol } = req.params;
 
     try {
-        const data = await yahooFinance.historical(symbol, {
-            period1: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-            period2: new Date(), // Current date
+        console.log(`Fetching historical data for: ${symbol}`);
+
+        // ✅ Define date range (Last 30 days)
+        const period1 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+        const period2 = new Date(); // Today
+
+        // ✅ Fetch data from Yahoo Finance
+        const result = await yahooFinance.chart(symbol, {
+            period1: period1.toISOString(),
+            period2: period2.toISOString(),
             interval: "1d",
         });
 
-        if (!data || data.length === 0) {
+        // 🔥 Debugging: Log full API response
+        console.log("Full Yahoo Finance API Response:", JSON.stringify(result, null, 2));
+
+        // ✅ Extract historical data correctly from `quotes`
+        if (!result || !result.quotes || result.quotes.length === 0) {
+            console.error("Error: No historical data received");
             return res.status(404).json({ message: "No historical data found." });
         }
 
-        const formattedData = data.map((entry) => ({
-            date: entry.date.toISOString().split("T")[0],
-            close: entry.close,
+        // ✅ Fix: Ensure date is converted to a string before formatting
+        const formattedData = result.quotes.map((entry) => ({
+            date: new Date(entry.date).toISOString().split("T")[0], // Convert Date to String format YYYY-MM-DD
+            close: entry.close, // Closing price
         }));
 
+        console.log("Formatted Stock History:", formattedData);
         res.json(formattedData);
     } catch (error) {
         console.error("Error fetching stock history:", error);
@@ -34,6 +48,7 @@ app.get("/api/stock-history/:symbol", async (req, res) => {
     }
 });
 
+// ✅ Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

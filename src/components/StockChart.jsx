@@ -2,7 +2,7 @@ import React from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Brush } from "recharts";
 
 const StockChart = ({ stockHistory }) => {
-    if (!stockHistory || stockHistory.history.length === 0) {
+    if (!stockHistory || !Array.isArray(stockHistory) || stockHistory.length === 0) {
         return <p className="text-center text-gray-500">No historical data available.</p>;
     }
 
@@ -11,14 +11,8 @@ const StockChart = ({ stockHistory }) => {
     return (
         <div className="bg-white p-4 shadow rounded-lg">
             <h2 className="text-xl font-semibold text-center mb-4">Stock Price History</h2>
-
-            {/* Display Latest Closing Price */}
-            <p className="text-center text-lg font-medium text-gray-700">
-                Latest Closing Price: <span className="text-green-600 font-bold">${stockHistory.latestPrice}</span>
-            </p>
-
             <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={stockHistory.history}>
+                <LineChart data={stockHistory}>
                     <XAxis dataKey="date" tick={{ fontSize: 14 }} />
                     <YAxis tick={{ fontSize: 14 }} />
                     <Tooltip contentStyle={{ backgroundColor: '#f5f5f5', borderRadius: '5px' }}

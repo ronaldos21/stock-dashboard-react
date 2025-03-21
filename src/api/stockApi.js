@@ -39,10 +39,10 @@ export const fetchStockData = async (symbol) => {
 /**
  * Fetches historical stock data for the past 30 days
  */
-export const fetchStockHistory = async (symbol) => {
+export const fetchStockHistory = async (symbol, range = "1mo") => {
     try {
-        const response = await axios.get(`http://localhost:5004/api/stock-history/${symbol}`);
-        console.log("Fetched Stock History Data:", response.data);
+        const response = await axios.get(`http://localhost:5004/api/stock-history/${symbol}/${range}`);
+        console.log("Fetched Stock History Data:", response.data); // Debugging
         return response.data;
     } catch (error) {
         console.error("Error fetching stock history:", error);

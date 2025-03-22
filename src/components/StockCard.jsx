@@ -22,9 +22,9 @@ const StockCard = ({ stock }) => {
     return (
         <div className="p-6 bg-white dark:bg-gray-700 shadow-md rounded-lg w-full text-center">
             <h2 className="text-xl font-semibold">{stock.name} ({stock.symbol})</h2>
-            <p className="text-3xl font-bold text-green-500">${livePrice}</p>
+            <p className="text-3xl font-bold text-green-500">${Number(livePrice ?? 0).toFixed(2)}</p>
             <p className={`text-lg font-semibold ${stock.change > 0 ? "text-green-600" : "text-red-600"}`}>
-                {stock.change > 0 ? "▲" : "▼"} {stock.changePercent}%
+                {stock.change > 0 ? "▲" : "▼"} {stock.changePercent != null ? `${stock.changePercent}%` : "N/A"}
             </p>
             <button
                 onClick={() => addToWatchlist(stock)}

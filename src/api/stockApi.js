@@ -9,30 +9,41 @@ const FINNHUB_BASE_URL = "https://finnhub.io/api/v1";
  */
 export const fetchStockData = async (symbol) => {
     try {
-        const response = await axios.get(`${FINNHUB_BASE_URL}/quote`, {
-            params: {
-                symbol: symbol,
-                token: FINNHUB_API_KEY,
-            },
-        });
-
-        console.log("Full API Response:", response.data); // Debugging
-
-        if (!response.data || Object.keys(response.data).length === 0) {
-            console.warn("Stock not found in API response.");
-            return null;
-        }
+        const response = await axios.get(`http://localhost:5004/api/quote/${symbol}`);
+        const data = response.data;
 
         return {
-            name: symbol,
-            symbol: symbol,
-            price: response.data.c, // Current price
-            change: response.data.d, // Change in price
-            changePercent: response.data.dp + "%", // Change percentage
+            name: data.name || symbol,
+            symbol: data.symbol,
+            price: data.price,
+            change: data.change,
+            changePercent: (data.changePercent * 100).toFixed(2), // Make sure it's a %
         };
     } catch (error) {
-        console.error("Error fetching stock data:", error);
-        return null;
+        console.warn(`Fallback failed for ${symbol}, trying Finnhub...`);
+
+        // Fallback to Finnhub if Yahoo fails
+        try {
+            const fallback = await axios.get(`${FINNHUB_BASE_URL}/quote`, {
+                params: {
+                    symbol: symbol,
+                    token: FINNHUB_API_KEY,
+                },
+            });
+
+            const quote = fallback.data;
+
+            return {
+                name: symbol,
+                symbol: symbol,
+                price: quote.c ?? 0,
+                change: quote.d ?? 0,
+                changePercent: quote.dp ?? 0,
+            };
+        } catch (finnhubError) {
+            console.error("Both Yahoo and Finnhub failed:", finnhubError);
+            return null;
+        }
     }
 };
 

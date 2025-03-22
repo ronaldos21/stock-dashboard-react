@@ -4,7 +4,8 @@ const Watchlist = () => {
     const { watchlist, removeFromWatchlist } = useWatchlist();
 
     return (
-        <div className="p-6 bg-gray-100 shadow-md rounded-lg w-full">
+        <div className="bg-white dark:bg-gray-400 p-4 shadow rounded-lg">
+
             <h2 className="text-lg font-semibold mb-2">📋 Your Watchlist</h2>
             {watchlist.length === 0 ? (
                 <p className="text-gray-500">Your watchlist is empty.</p>

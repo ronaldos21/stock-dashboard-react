@@ -51,7 +51,9 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
+        //<div className="min-h-screen bg-gray-100 p-6">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+
             <div className="max-w-4xl mx-auto space-y-6">
                 <StockSearch onSearch={handleSearch} />
 

@@ -59,6 +59,45 @@ app.get("/api/stock-history/:symbol/:range", async (req, res) => {
     }
 });
 
+// New route to fetch trending stocks with prices
+app.get("/api/trending-stocks", async (req, res) => {
+    try {
+        const trending = await yahooFinance.trendingSymbols("US");
+
+        const symbols = trending.quotes.map((quote) => quote.symbol);
+        console.log("📊 Trending Symbols:", symbols);
+
+        const detailedQuotes = await yahooFinance.quote(symbols);
+        console.log("📈 Detailed Trending Quotes:", detailedQuotes);
+
+        res.json(detailedQuotes);
+    } catch (error) {
+        console.error("Error fetching trending stocks:", error);
+        res.status(500).json({ message: "Failed to fetch trending stocks" });
+    }
+});
+
+app.get("/api/quote/:symbol", async (req, res) => {
+    const { symbol } = req.params;
+
+    try {
+        const quote = await yahooFinance.quote(symbol);
+        res.json({
+            symbol: quote.symbol,
+            name: quote.shortName || quote.longName || symbol,
+            price: quote.regularMarketPrice ?? 0,
+            change: quote.regularMarketChange ?? 0,
+            changePercent: quote.regularMarketChangePercent ?? 0,
+        });
+    } catch (error) {
+        console.error("Error fetching stock quote:", error);
+        res.status(500).json({ message: "Failed to fetch quote" });
+    }
+});
+
+
+
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

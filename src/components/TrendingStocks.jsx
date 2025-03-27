@@ -1,5 +1,6 @@
 // src/components/TrendingStocks.jsx
 import React, { useEffect, useState } from 'react';
+import Sparkline from "./Sparkline";
 
 const TrendingStocks = ({ onSearch }) => {
     const [trendingStocks, setTrendingStocks] = useState([]);
@@ -58,21 +59,31 @@ const TrendingStocks = ({ onSearch }) => {
                             {/* Price */}
                             <div className="text-green-500 dark:text-green-400 font-medium">
                                 ${stock.regularMarketPrice?.toFixed(2) || "N/A"}
+
                             </div>
 
                             {/* Trend Indicator */}
                             {typeof stock.regularMarketChangePercent === "number" && (
                                 <div
-                                    className={`text-sm ${stock.regularMarketChangePercent > 0
+                                    className={`font-medium ${stock.regularMarketChangePercent > 0
                                         ? "text-green-500"
                                         : "text-red-500"
                                         }`}
                                 >
                                     {stock.regularMarketChangePercent > 0 ? "▲" : "▼"}{" "}
                                     {Math.abs(stock.regularMarketChangePercent).toFixed(2)}%
+
                                 </div>
                             )}
+                            {/* Sparkline */}
+                            <div className="w-24 h-8 mt-1">
+                                <Sparkline
+                                    symbol={stock.symbol}
+                                    color={stock.regularMarketChangePercent > 0 ? "#22c55e" : "#ef4444"} // Tailwind green-500 / red-500
+                                />
+                            </div>
                         </div>
+
                     </li>
 
                 ))}

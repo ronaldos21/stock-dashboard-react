@@ -62,6 +62,26 @@ export const fetchStockHistory = async (symbol, range = "1mo") => {
 };
 
 /**
+ * Fetches symbol suggestions based on a query using Finnhub
+ */
+export const searchStockSymbols = async (query) => {
+    try {
+        const response = await axios.get(`${FINNHUB_BASE_URL}/search`, {
+            params: {
+                q: query,
+                token: FINNHUB_API_KEY,
+            },
+        });
+
+        return response.data.result || [];
+    } catch (error) {
+        console.error("Error fetching search suggestions:", error);
+        return [];
+    }
+};
+
+
+/**
  * Subscribes to real-time stock price updates via WebSocket
  */
 export const subscribeToStock = (symbol, onMessage) => {

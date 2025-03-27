@@ -26,6 +26,15 @@ const StockCard = ({ stock }) => {
             <p className={`text-lg font-semibold ${stock.change > 0 ? "text-green-600" : "text-red-600"}`}>
                 {stock.change > 0 ? "▲" : "▼"} {stock.changePercent != null ? `${stock.changePercent}%` : "N/A"}
             </p>
+
+            <img
+                src={`https://logo.clearbit.com/${stock.symbol.split("-")[0].toLowerCase()}.com`}
+                alt={`${stock.symbol} logo`}
+                className="w-12 h-12 rounded-full mx-auto mb-2"
+                onError={(e) => (e.target.style.display = "none")}
+            />
+
+
             <button
                 onClick={() => addToWatchlist(stock)}
                 className="mt-4 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded hover:bg-blue-700"

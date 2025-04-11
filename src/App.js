@@ -5,6 +5,8 @@ import Footer from "./components/Footer";
 import Dashboard from "./pages/Dashboard";
 import About from "./pages/About";
 import { WatchlistProvider } from "./context/WatchlistContext";
+import { AlertsProvider } from "./context/AlertsContext";
+import { Toaster } from "react-hot-toast";
 
 function App() {
 
@@ -34,18 +36,26 @@ function App() {
 
 
   return (
-    <WatchlistProvider>
-      <Router>
-        <div className={`min-h-screen ${darkMode ? "dark bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
-          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </WatchlistProvider>
+
+    <AlertsProvider>
+      <WatchlistProvider>
+        <Router>
+
+          <Toaster position="top-center" />
+          <div className={`min-h-screen ${darkMode ? "dark bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
+
+            <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+            <Footer />
+
+          </div>
+
+        </Router>
+      </WatchlistProvider>
+    </AlertsProvider>
   );
 }
 

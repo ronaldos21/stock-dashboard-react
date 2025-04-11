@@ -6,6 +6,7 @@ import StockChart from '../components/StockChart';
 import Watchlist from '../components/Watchlist';
 import TrendingStocks from '../components/TrendingStocks';
 import { fetchStockHistory, fetchStockData } from '../api/stockApi';
+import CompareStocks from '../components/CompareStocks';
 
 const Dashboard = () => {
     const [stock, setStock] = useState(null);
@@ -78,6 +79,10 @@ const Dashboard = () => {
                 {error && <p className="text-center text-red-500">{error}</p>}
                 {stock && <StockCard stock={stock} />}
                 {chartData.length > 0 && <StockChart stockHistory={chartData} />}
+
+                {/* Compare Stocks Section */}
+                <CompareStocks />
+
             </div>
         </div>
     );

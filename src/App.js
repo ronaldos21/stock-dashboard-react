@@ -41,7 +41,7 @@ function App() {
       <WatchlistProvider>
         <Router>
 
-          <Toaster position="top-center" />
+          <Toaster position="top-right" reverseOrder={false} />
           <div className={`min-h-screen ${darkMode ? "dark bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
 
             <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />

@@ -96,6 +96,31 @@ app.get("/api/quote/:symbol", async (req, res) => {
 });
 
 
+const axios = require("axios");
+//Route: Fetch recent news for a given stock symbol
+const NEWS_API_KEY = "740f18459bdc4bd183114550dcfc359f";
+
+app.get("/api/news/:symbol", async (req, res) => {
+    const { symbol } = req.params;
+
+    try {
+        const response = await fetch(
+            `https://newsapi.org/v2/everything?q=${symbol}&sortBy=publishedAt&pageSize=5&language=en&apiKey=${NEWS_API_KEY}`
+        );
+        const data = await response.json();
+
+        if (data.status !== "ok") {
+            console.error("News API error:", data);
+            return res.status(500).json({ message: "News API error" });
+        }
+
+        res.json(data.articles);
+    } catch (error) {
+        console.error("Error fetching news:", error);
+        res.status(500).json({ message: "Failed to fetch news" });
+    }
+});
+
 
 
 // Start server

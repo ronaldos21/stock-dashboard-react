@@ -105,6 +105,7 @@ const StockCard = ({ stock }) => {
                     </p>
                 )}
             </div>
+
             {/* 📰 News Sentiment Section */}
             <div className="mt-6">
                 <StockNews symbol={stock.symbol} />

@@ -62,9 +62,14 @@ const NewsSentiment = ({ symbol }) => {
 
                     return (
                         <li key={idx} className="border-b pb-2 border-gray-300 dark:border-gray-600">
-                            <p className="text-black dark:text-white font-medium">
-                                <a href={article.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                    {article.title}
+                            <p className="text-black dark:text-white font-medium flex items-center gap-2">
+                                <a
+                                    href={article.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline flex items-center gap-1"
+                                >
+                                    <span role="img" aria-label="link">📰</span> {article.title}
                                 </a>
                             </p>
                             <div className="text-sm flex justify-between">
